@@ -7,12 +7,13 @@
     <title>Playground — Complete Intro to Vue 3</title>
   </head>
   <body>
-    <h1>hello</h1>
+    <h1>Hello</h1>
     <div id="app">
-      <h1>Counter</h1>
-      <p>{{ count }}</p>
+      <h1>{{ displayTitle }}</h1>
+      <p :data-increment-by="incrementAmount">{{ count }}</p>
       <button v-on:click="inrementCount">Increment Count</button>
       <h1>{{ inrementAmount }}</h1>
+      <p>{{ optimizedIncrementAmount }}</p>
       <div>
         <label for="inrementAmount">Increment by:</label>
         <input type="number" v-model="incrementAmount" />
@@ -33,14 +34,35 @@
         data() {
           return {
             count: 10,
+            counterTitle: "Counter Standard",
             incrementAmount: 1,
             message: "HELLO",
             listOfNumbers: [1, 2, 3, 4, 5],
           };
         },
+        computed: {
+          displayTitle() {
+            if (this.count > 20) {
+              return "Counter Standard - Very Long";
+            } else {
+              return "Counter Standard";
+            }
+          },
+          optimizedIncrementAmount() {
+            return this.displayTitle.length * this.incrementAmount;
+          },
+        },
         methods: {
           inrementCount() {
-            this.count += this.incrementAmount;
+            this.count += this.optimizedIncrementAmount;
+          },
+        },
+        watch: {
+          count(newValue) {
+            console.log(newValue);
+            if (newValue > 20) {
+              this.counterTitle += " Very Long";
+            }
           },
         },
       });
